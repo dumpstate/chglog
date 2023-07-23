@@ -2,44 +2,14 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
-	"path/filepath"
 
 	openai "github.com/sashabaranov/go-openai"
 	"github.com/urfave/cli/v2"
 )
-
-type Config struct {
-	OpenAI struct {
-		Token string `json:"token"`
-	} `json:"openai"`
-}
-
-func loadConfig() *Config {
-	userHome, err := os.UserHomeDir()
-	if err != nil {
-		log.Fatal(err)
-	}
-	cfgPath := filepath.Join(userHome, ".chglog.json")
-	_, err = os.Stat(cfgPath)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	content, err := ioutil.ReadFile(cfgPath)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var cfg Config
-	err = json.Unmarshal(content, &cfg)
-	return &cfg
-}
 
 func getDiff() string {
 	out, err := exec.Command("git", "diff", "--no-color", "HEAD~1", "HEAD").Output()
@@ -104,12 +74,20 @@ func commitMessage(client *openai.Client, diff string) string {
 }
 
 func main() {
-	cfg := loadConfig()
-	oaiClient := openai.NewClient(cfg.OpenAI.Token)
+	cfg := readConfig()
+	oaiClient := openai.NewClient(cfg.OpenAI.ApiKey)
 	app := &cli.App{
 		Name:  "chglog",
 		Usage: "chglog",
 		Flags: []cli.Flag{},
+		Commands: []*cli.Command{
+			{
+				Name:    "init",
+				Aliases: []string{"i"},
+				Usage:   "initialise chglog config file",
+				Action:  initConfig,
+			},
+		},
 		Action: func(ctx *cli.Context) error {
 			diff := getDiff()
 			fmt.Printf("Commit message:\n%s\n\n", commitMessage(oaiClient, diff))
