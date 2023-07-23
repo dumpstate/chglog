@@ -17,6 +17,7 @@ type OpenAIConfig struct {
 
 type Config struct {
 	OpenAI OpenAIConfig `json:"openai"`
+	Ignore []string     `json:"ignore"`
 }
 
 func cfgPath() string {
@@ -74,6 +75,7 @@ func initConfig(ctx *cli.Context) error {
 		OpenAI: OpenAIConfig{
 			ApiKey: openaiApiKey,
 		},
+		Ignore: []string{},
 	}
 	writeConfig(path, &config)
 	fmt.Printf("Config initialised: %s\n", path)
