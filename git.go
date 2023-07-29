@@ -6,17 +6,17 @@ import (
 	"strings"
 )
 
-func isGitRepo() bool {
-	// TODO
-	return true
-}
-
 func execGitCmd(args ...string) string {
 	out, err := exec.Command("git", args...).Output()
 	if err != nil {
 		log.Fatal(err)
 	}
 	return strings.TrimSpace(string(out))
+}
+
+func isGitRepo() bool {
+	out := execGitCmd("remote")
+	return !strings.HasPrefix(out, "fatal: not a git repository")
 }
 
 func getBranchName() string {
