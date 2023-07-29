@@ -24,5 +24,9 @@ func getBranchName() string {
 }
 
 func getCurrentDiff() string {
-	return execGitCmd("diff", "--no-color", "--staged")
+	diff := execGitCmd("diff", "--no-color", "--staged")
+	if diff == "" {
+		diff = execGitCmd("diff", "--no-color")
+	}
+	return diff
 }
