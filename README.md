@@ -15,3 +15,13 @@ The `chglog` will ask for required configuration parameters and store in the con
 Subsequent call will override the current config.
 
 Note, to configure the details, one should edit the configuration file manually.
+
+### Generate Commit Message
+
+Call from the git repository:
+
+```sh
+chglog commit
+```
+
+`chglog` reads the branch name, takes the `git diff` and asks LLM for a single line commit message.
