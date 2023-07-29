@@ -46,7 +46,7 @@ func genCommitMessage(
 	res, err := oaiClient.CreateChatCompletion(
 		context.Background(),
 		openai.ChatCompletionRequest{
-			Model: openai.GPT4,
+			Model: openaiModel(cfg),
 			Messages: []openai.ChatCompletionMessage{
 				{
 					Role:    openai.ChatMessageRoleSystem,
