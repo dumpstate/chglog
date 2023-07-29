@@ -11,13 +11,25 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+const (
+	Gpt35Turbo string = "gpt-3.5-turbo"
+	Gpt4              = "gpt-4"
+)
+
 type OpenAIConfig struct {
 	ApiKey string `json:"apiKey"`
+	Model  string `json:"model"`
 }
 
 type Config struct {
 	OpenAI OpenAIConfig `json:"openai"`
 	Ignore []string     `json:"ignore"`
+}
+
+func validateModel(model string) {
+	if (model != Gpt35Turbo) && (model != Gpt4) {
+		log.Fatalf("Invalid OpenAI model: %s", model)
+	}
 }
 
 func cfgPath() string {
@@ -54,6 +66,7 @@ func readConfig() *Config {
 
 	var cfg Config
 	err = json.Unmarshal(content, &cfg)
+	validateModel(cfg.OpenAI.Model)
 	return &cfg
 }
 
@@ -70,10 +83,14 @@ func initConfig(ctx *cli.Context) error {
 
 	fmt.Printf("OpenAI API Key: ")
 	openaiApiKey := readStdIn()
+	fmt.Printf("OpenAI Model (gpt-3.5-turbo/gpt-4): ")
+	openaiModel := readStdIn()
+	validateModel(openaiModel)
 
 	config := Config{
 		OpenAI: OpenAIConfig{
 			ApiKey: openaiApiKey,
+			Model:  openaiModel,
 		},
 		Ignore: []string{},
 	}

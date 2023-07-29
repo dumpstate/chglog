@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -10,8 +9,6 @@ import (
 )
 
 func main() {
-	cfg := readConfig()
-	oaiClient := openai.NewClient(cfg.OpenAI.ApiKey)
 	app := &cli.App{
 		Name:  "chglog",
 		Usage: "chglog",
@@ -28,14 +25,11 @@ func main() {
 				Aliases: []string{"c"},
 				Usage:   "generate a commit message",
 				Action: func(ctx *cli.Context) error {
-					return commit(oaiClient)
+					cfg := readConfig()
+					oaiClient := openai.NewClient(cfg.OpenAI.ApiKey)
+					return commit(oaiClient, cfg)
 				},
 			},
-		},
-		Action: func(ctx *cli.Context) error {
-			diff := getCurrentDiff()
-			fmt.Printf("Changelog entry:\n%s\n", genSummary(oaiClient, diff))
-			return nil
 		},
 	}
 

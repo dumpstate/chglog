@@ -26,8 +26,20 @@ START OF DIFF
 END OF DIFF`, branch, diff)
 }
 
+func openaiModel(cfg *Config) string {
+	switch cfg.OpenAI.Model {
+	case Gpt35Turbo:
+		return openai.GPT3Dot5Turbo
+	case Gpt4:
+		return openai.GPT4
+	default:
+		return openai.GPT4
+	}
+}
+
 func genCommitMessage(
 	oaiClient *openai.Client,
+	cfg *Config,
 	branch string,
 	diff string,
 ) string {
