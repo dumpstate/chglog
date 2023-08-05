@@ -25,3 +25,16 @@ chglog commit
 ```
 
 `chglog` reads the branch name, takes the `git diff` and asks LLM for a single line commit message.
+
+### Generate Changelog Entry
+
+Generates changelog entry and appends to `CHANGELOG.md` file in the root of the project.
+
+```sh
+chglog changelog [--append]
+```
+
+`chglog` takes a diff of all unstaged changes and asks LLM for a changelog entry.
+
+By default, the changelog entry is just printed to stdout, with `--append` flag, it is appended
+to the `CHANGELOG.md` file.

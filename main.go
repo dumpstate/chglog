@@ -30,6 +30,16 @@ func main() {
 					return commit(oaiClient, cfg)
 				},
 			},
+			{
+				Name: "changelog",
+				Aliases: []string{"cl"},
+				Usage: "generate a changelog entry",
+				Action: func(ctx *cli.Context) error {
+					cfg := readConfig()
+					oaiClient := openai.NewClient(cfg.OpenAI.ApiKey)
+					return changelogEntry(oaiClient, cfg)
+				},
+			},
 		},
 	}
 
