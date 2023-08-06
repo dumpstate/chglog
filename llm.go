@@ -134,30 +134,3 @@ func genChangelogEntry(
 	}
 	return strings.TrimSpace(res.Choices[0].Message.Content)
 }
-
-func genSummary(client *openai.Client, diff string) string {
-	res, err := client.CreateChatCompletion(
-		context.Background(),
-		openai.ChatCompletionRequest{
-			Model: openai.GPT3Dot5Turbo,
-			Messages: []openai.ChatCompletionMessage{
-				{
-					Role: openai.ChatMessageRoleAssistant,
-					Content: fmt.Sprintf(`
-						You're a programmer's assistant. Given the git diff below, summarise and write a changelog
-						entry for the change. Provide your output right away, no prefixes, such that it could be
-						used as a changelog entry.
-
-						START OF DIFF
-						%s
-						END OF DIFF
-					`, diff),
-				},
-			},
-		},
-	)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return res.Choices[0].Message.Content
-}
