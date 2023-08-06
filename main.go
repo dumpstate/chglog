@@ -9,6 +9,9 @@ import (
 )
 
 func main() {
+	var appendChangelog bool
+	var changelogFile string
+
 	app := &cli.App{
 		Name:  "chglog",
 		Usage: "chglog",
@@ -31,13 +34,26 @@ func main() {
 				},
 			},
 			{
-				Name: "changelog",
+				Name:    "changelog",
 				Aliases: []string{"cl"},
-				Usage: "generate a changelog entry",
+				Usage:   "generate a changelog entry",
+				Flags: []cli.Flag{
+					&cli.BoolFlag{
+						Name:        "append",
+						Usage:       "append to existing changelog file",
+						Destination: &appendChangelog,
+					},
+					&cli.StringFlag{
+						Name:        "target",
+						Usage:       "target changelog file",
+						Value:       "CHANGELOG.md",
+						Destination: &changelogFile,
+					},
+				},
 				Action: func(ctx *cli.Context) error {
 					cfg := readConfig()
 					oaiClient := openai.NewClient(cfg.OpenAI.ApiKey)
-					return changelogEntry(oaiClient, cfg)
+					return changelogEntry(oaiClient, cfg, appendChangelog, changelogFile)
 				},
 			},
 		},

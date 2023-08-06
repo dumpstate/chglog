@@ -44,7 +44,7 @@ be a short and concise sentend.
 The result should be formatted as a markdown list, with each bucket
 being a markdown header (with '###'), e.g.:
 
-'''
+START OF AN EXAMPLE
 ### Added
 
 - Arabic translation
@@ -57,7 +57,9 @@ being a markdown header (with '###'), e.g.:
 ### Removed
 
 - Unused normalize.css file
-'''
+END OF AN EXAMPLE
+
+Do not prefix or suffix your answer, provide it right away.
 
 BRANCH NAME: %s
 

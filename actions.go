@@ -20,7 +20,7 @@ func commit(oaiClient *openai.Client, cfg *Config) error {
 	return nil
 }
 
-func changelogEntry(oaiClient *openai.Client, cfg *Config) error {
+func changelogEntry(oaiClient *openai.Client, cfg *Config, append bool, changelogFile string) error {
 	if !isGitRepo() {
 		log.Fatal("ERR: not a git repository")
 	}
@@ -28,7 +28,12 @@ func changelogEntry(oaiClient *openai.Client, cfg *Config) error {
 	branch := getBranchName()
 	diff := getCurrentDiff()
 	msg := genChangelogEntry(oaiClient, cfg, branch, diff)
-	fmt.Printf("%s\n", msg)
+
+	if append {
+		appendChangelog(msg, changelogFile)
+	} else {
+		fmt.Printf("%s\n", msg)
+	}
 
 	return nil
 }

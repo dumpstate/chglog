@@ -31,10 +31,10 @@ chglog commit
 Generates changelog entry and appends to `CHANGELOG.md` file in the root of the project.
 
 ```sh
-chglog changelog [--append]
+chglog changelog [--append] [--target CHANGELOG.md]
 ```
 
 `chglog` takes a diff of all unstaged changes and asks LLM for a changelog entry.
 
 By default, the changelog entry is just printed to stdout, with `--append` flag, it is appended
-to the `CHANGELOG.md` file.
+to the `CHANGELOG.md` file. The `--target` flag allows to specify a different file.

@@ -13,7 +13,7 @@ import (
 
 const (
 	Gpt35Turbo string = "gpt-3.5-turbo"
-	Gpt4              = "gpt-4"
+	Gpt4       string = "gpt-4"
 )
 
 type OpenAIConfig struct {
